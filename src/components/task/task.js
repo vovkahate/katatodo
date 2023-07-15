@@ -1,24 +1,8 @@
 import React from "react";
 
 export default class Task extends React.Component {
-  state = {
-    done: false,
-  };
-
-  //const [checked, setChecked] = useState(false)
-
-  onLabelClick = () => {
-    this.setState(({ done }) => {
-      return {
-        done: !done,
-      };
-    });
-  };
-
   render() {
-    const { id, condition, label, onDeleted } = this.props;
-
-    const { done } = this.state;
+    const { id, condition, label, onDeleted, onToggleDone, done } = this.props;
 
     let classCondition = "";
     if (done) classCondition += "completed";
@@ -29,11 +13,11 @@ export default class Task extends React.Component {
           <input
             className="toggle"
             type="checkbox"
-            onChange={this.onLabelClick}
-            checked={this.state.done}
+            onChange={onToggleDone}
+            checked={done}
           />
           <label>
-            <span className="description" onClick={this.onLabelClick}>
+            <span className="description" onClick={onToggleDone}>
               {label}
             </span>
             <span className="created">5 min ago</span>
