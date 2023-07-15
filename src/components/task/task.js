@@ -8,15 +8,15 @@ export default class Task extends React.Component {
   //const [checked, setChecked] = useState(false)
 
   onLabelClick = () => {
-    this.setState((state) => {
+    this.setState(({ done }) => {
       return {
-        done: !state.done,
+        done: !done,
       };
     });
   };
 
   render() {
-    const { id, condition, label } = this.props;
+    const { id, condition, label, onDeleted } = this.props;
 
     const { done } = this.state;
 
@@ -40,7 +40,7 @@ export default class Task extends React.Component {
           </label>
 
           <button className="icon icon-edit"></button>
-          <button className="icon icon-destroy"></button>
+          <button className="icon icon-destroy" onClick={onDeleted}></button>
         </div>
       </li>
     );
