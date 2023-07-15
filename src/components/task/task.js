@@ -1,7 +1,48 @@
 import React from "react";
 
-const Task = ({ label }) => {
-  return <span>{label}</span>;
-};
+export default class Task extends React.Component {
+  state = {
+    done: false,
+  };
 
-export default Task;
+  //const [checked, setChecked] = useState(false)
+
+  onLabelClick = () => {
+    this.setState((state) => {
+      return {
+        done: !state.done,
+      };
+    });
+  };
+
+  render() {
+    const { id, condition, label } = this.props;
+
+    const { done } = this.state;
+
+    let classCondition = "";
+    if (done) classCondition += "completed";
+
+    return (
+      <li className={classCondition}>
+        <div className="view">
+          <input
+            className="toggle"
+            type="checkbox"
+            onChange={this.onLabelClick}
+            checked={this.state.done}
+          />
+          <label>
+            <span className="description" onClick={this.onLabelClick}>
+              {label}
+            </span>
+            <span className="created">5 min ago</span>
+          </label>
+
+          <button className="icon icon-edit"></button>
+          <button className="icon icon-destroy"></button>
+        </div>
+      </li>
+    );
+  }
+}
