@@ -62,6 +62,13 @@ export default class App extends React.Component {
     this.setState({ term });
   };
 
+  clearCompleted = () => {
+    this.setState(({ taskData }) => {
+      const newArr = taskData.filter((el) => !el.done);
+      return { taskData: newArr };
+    });
+  };
+
   search(items, term) {
     if (term === "all") return items;
     else if (term === "completed") {
@@ -94,9 +101,8 @@ export default class App extends React.Component {
           <Footer
             toDo={todoCount}
             done={doneCount}
-            // doneFilter={doneFilter}
-            // undoneFilter={undoneFilter}
             onFilter={this.onFilter}
+            clear={this.clearCompleted}
           />
         </section>
       </section>
