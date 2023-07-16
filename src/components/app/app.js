@@ -13,6 +13,7 @@ export default class App extends React.Component {
       this.createTaskItem("Make Awesome App"),
       this.createTaskItem("Have a lunch"),
     ],
+    term: "all",
   };
 
   createTaskItem(label) {
@@ -57,21 +58,46 @@ export default class App extends React.Component {
     });
   };
 
+  onFilter = (term) => {
+    this.setState({ term });
+  };
+
+  search(items, term) {
+    if (term === "all") return items;
+    else if (term === "completed") {
+      return items.filter((item) => item.done);
+    } else if (term === "active") {
+      return items.filter((item) => !item.done);
+    }
+  }
+
   render() {
+    const { taskData, term } = this.state;
+    const visibleItems = this.search(taskData, term);
+
     const doneCount = this.state.taskData.filter((el) => el.done).length;
     const todoCount = this.state.taskData.length - doneCount;
 
+    //const doneFilter = this.state.taskData.filter((el) => el.done);
+    //const undoneFilter = this.state.taskData.filter((el) => !el.done);
+
     return (
       <section className="todoapp">
-        <AppHeader />
+        <AppHeader onItemAdded={this.addItem} />
+
         <section className="main">
           <TaskList
-            todos={this.state.taskData}
+            todos={visibleItems}
             onDeleted={this.deleteItem}
             onToggleDone={this.onToggleDone}
           />
-          <ItemAddForm onItemAdded={this.addItem} />
-          <Footer toDo={todoCount} done={doneCount} />
+          <Footer
+            toDo={todoCount}
+            done={doneCount}
+            // doneFilter={doneFilter}
+            // undoneFilter={undoneFilter}
+            onFilter={this.onFilter}
+          />
         </section>
       </section>
     );
