@@ -41,12 +41,20 @@ export default class App extends React.Component {
   };
 
   addItem = (text) => {
-    const newItem = this.createTaskItem(text);
-    this.setState(({ taskData }) => {
-      const updatedTaskData = [...taskData, newItem];
+    if (text === "" || text.replace(" ", "").length === 0) {
+      const newItem = this.createTaskItem("Empty task");
+      this.setState(({ taskData }) => {
+        const updatedTaskData = [...taskData, newItem];
+        return { taskData: updatedTaskData };
+      });
+    } else {
+      const newItem = this.createTaskItem(text.trim());
+      this.setState(({ taskData }) => {
+        const updatedTaskData = [...taskData, newItem];
 
-      return { taskData: updatedTaskData };
-    });
+        return { taskData: updatedTaskData };
+      });
+    }
   };
 
   onToggleDone = (id) => {
