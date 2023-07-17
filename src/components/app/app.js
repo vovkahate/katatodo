@@ -2,42 +2,48 @@ import React from "react";
 import AppHeader from "../header";
 import TaskList from "../tasklist/tasklist";
 import Footer from "../footer/footer";
-import ItemAddForm from "../task-add-form/task-add-form";
 
+import { v4 as uuidv4 } from "uuid";
 export default class App extends React.Component {
-  maxId = 100;
-
   state = {
-    taskData: [
-      this.createTaskItem("Drink coffe"),
-      this.createTaskItem("Make Awesome App"),
-      this.createTaskItem("Have a lunch"),
-    ],
+    taskData: [],
     term: "all",
   };
+
+  componentDidMount() {
+    const storedData = localStorage.getItem("taskData");
+
+    if (storedData) {
+      this.setState({
+        taskData: JSON.parse(storedData),
+      });
+    }
+  }
+  componentDidUpdate() {
+    localStorage.setItem("taskData", JSON.stringify(this.state.taskData));
+  }
 
   createTaskItem(label) {
     return {
       label,
-      id: this.maxId++,
+      id: uuidv4(),
       done: false,
     };
   }
-
   deleteItem = (id) => {
     this.setState(({ taskData }) => {
-      const idx = taskData.findIndex((el) => id === el.id);
+      const updatedTaskData = taskData.filter((el) => el.id !== id);
 
-      return { taskData: taskData.toSpliced(idx, 1) };
+      return { taskData: updatedTaskData };
     });
   };
 
   addItem = (text) => {
     const newItem = this.createTaskItem(text);
     this.setState(({ taskData }) => {
-      const newArray = [...taskData, newItem];
+      const updatedTaskData = [...taskData, newItem];
 
-      return { taskData: newArray };
+      return { taskData: updatedTaskData };
     });
   };
 
