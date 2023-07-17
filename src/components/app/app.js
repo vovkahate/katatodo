@@ -2,6 +2,7 @@ import React from "react";
 import AppHeader from "../header";
 import TaskList from "../tasklist/tasklist";
 import Footer from "../footer/footer";
+import { format } from "date-fns/format";
 
 import { v4 as uuidv4 } from "uuid";
 export default class App extends React.Component {
@@ -28,6 +29,7 @@ export default class App extends React.Component {
       label,
       id: uuidv4(),
       done: false,
+      date: new Date(),
     };
   }
   deleteItem = (id) => {

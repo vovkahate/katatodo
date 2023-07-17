@@ -1,14 +1,15 @@
 import React from "react";
+import { parse, formatDistanceToNow } from "date-fns";
 
 export default class Task extends React.Component {
   render() {
-    const { id, condition, label, onDeleted, onToggleDone, done } = this.props;
+    const { id, date, label, onDeleted, onToggleDone, done } = this.props;
 
     let classCondition = "";
     if (done) classCondition += "completed";
-
+    const result = formatDistanceToNow(new Date(date));
     return (
-      <li className={classCondition}>
+      <li id={id} className={classCondition}>
         <div className="view">
           <input
             className="toggle"
@@ -20,7 +21,7 @@ export default class Task extends React.Component {
             <span className="description" onClick={onToggleDone}>
               {label}
             </span>
-            <span className="created">5 min ago</span>
+            <span className="created">{result}</span>
           </label>
 
           <button className="icon icon-edit"></button>
