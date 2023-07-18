@@ -16,13 +16,15 @@ export default class Task extends React.Component {
   onLabelChange = (e) => {
     if (e.key === "Escape") {
       this.setState({
-        newLabel: this.state.oldLabel,
+        isEditing: false,
+        editedLabel: this.state.oldLabel,
+      });
+    } else {
+      this.setState({
+        newLabel: e.target.value,
+        editedLabel: e.target.value,
       });
     }
-    this.setState({
-      newLabel: e.target.value,
-      editedLabel: e.target.value,
-    });
   };
 
   onSubmit = (e) => {
@@ -74,6 +76,7 @@ export default class Task extends React.Component {
               //placeholder={this.state.editedLabel}
               value={this.state.editedLabel}
               onChange={(e) => this.onLabelChange(e)}
+              onKeyDown={this.onLabelChange}
             />
           </form>
         </li>

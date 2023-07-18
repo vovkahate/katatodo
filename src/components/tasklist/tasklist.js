@@ -3,8 +3,7 @@ import Task from "../task/task";
 
 export default class TaskList extends React.Component {
   render() {
-    const { todos, onDeleted, onToggleDone, setEditedChange, onItemEdited } =
-      this.props;
+    const { todos, onDeleted, onToggleDone, onItemEdited } = this.props;
     const elements = todos.map((item) => {
       return (
         <Task

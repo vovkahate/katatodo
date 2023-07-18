@@ -5,6 +5,10 @@ import Footer from "../footer/footer";
 
 import { v4 as uuidv4 } from "uuid";
 export default class App extends React.Component {
+  static defaultProps = {
+    done: false,
+  };
+
   state = {
     taskData: [],
     term: "all",
