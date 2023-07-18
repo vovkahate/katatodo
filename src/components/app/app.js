@@ -2,7 +2,6 @@ import React from "react";
 import AppHeader from "../header";
 import TaskList from "../tasklist/tasklist";
 import Footer from "../footer/footer";
-import { format } from "date-fns/format";
 
 import { v4 as uuidv4 } from "uuid";
 export default class App extends React.Component {
@@ -29,7 +28,7 @@ export default class App extends React.Component {
       label,
       id: uuidv4(),
       done: false,
-      date: new Date(),
+      date: Date.now(),
     };
   }
   deleteItem = (id) => {
@@ -41,12 +40,12 @@ export default class App extends React.Component {
   };
 
   addItem = (text) => {
-    if (text === "" || text.replace(" ", "").length === 0) {
-      const newItem = this.createTaskItem("Empty task");
-      this.setState(({ taskData }) => {
-        const updatedTaskData = [...taskData, newItem];
-        return { taskData: updatedTaskData };
-      });
+    if (text === "" || text.replaceAll(" ", "").length === 0) {
+      // const newItem = this.createTaskItem("Empty task");
+      // this.setState(({ taskData }) => {
+      //   const updatedTaskData = [...taskData, newItem];
+      //   return { taskData: updatedTaskData };
+      // });
     } else {
       const newItem = this.createTaskItem(text.trim());
       this.setState(({ taskData }) => {
@@ -94,6 +93,10 @@ export default class App extends React.Component {
     }
   }
 
+  onItemEdited = (x) => {
+    console.log(x);
+  };
+
   render() {
     const { taskData, term } = this.state;
     const visibleItems = this.search(taskData, term);
@@ -101,18 +104,17 @@ export default class App extends React.Component {
     const doneCount = this.state.taskData.filter((el) => el.done).length;
     const todoCount = this.state.taskData.length - doneCount;
 
-    //const doneFilter = this.state.taskData.filter((el) => el.done);
-    //const undoneFilter = this.state.taskData.filter((el) => !el.done);
-
     return (
       <section className="todoapp">
         <AppHeader onItemAdded={this.addItem} />
 
         <section className="main">
           <TaskList
+            setEditedChange={this.setEditedChange}
             todos={visibleItems}
             onDeleted={this.deleteItem}
             onToggleDone={this.onToggleDone}
+            onItemEdited={this.onItemEdited}
           />
           <Footer
             toDo={todoCount}
