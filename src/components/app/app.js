@@ -93,8 +93,21 @@ export default class App extends React.Component {
     }
   }
 
-  onItemEdited = (x) => {
-    console.log(x);
+  onItemEdited = (x, id) => {
+    this.setState(({ taskData }) => {
+      const idx = taskData.findIndex((el) => id === el.id);
+
+      const oldItem = taskData[idx];
+      const newItem = { ...oldItem, label: x };
+
+      const newArray = [
+        ...taskData.slice(0, idx),
+        newItem,
+        ...taskData.slice(idx + 1),
+      ];
+
+      return { taskData: newArray };
+    });
   };
 
   render() {

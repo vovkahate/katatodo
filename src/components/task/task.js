@@ -4,6 +4,7 @@ import { formatDistanceToNow } from "date-fns";
 export default class Task extends React.Component {
   state = {
     isEditing: false,
+    oldLabel: this.props.label,
     editedLabel: this.props.label,
     newLabel: "",
   };
@@ -13,6 +14,11 @@ export default class Task extends React.Component {
   };
 
   onLabelChange = (e) => {
+    if (e.key === "Escape") {
+      this.setState({
+        newLabel: this.state.oldLabel,
+      });
+    }
     this.setState({
       newLabel: e.target.value,
       editedLabel: e.target.value,
@@ -21,7 +27,7 @@ export default class Task extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    this.props.onItemEdited(this.state.newLabel);
+    this.props.onItemEdited(this.state.newLabel, this.props.id);
     this.setState({ isEditing: false });
   };
 
