@@ -3,6 +3,9 @@ import NewTaskForm from "../newtaskform";
 import PropTypes from "prop-types";
 
 export default class AppHeader extends React.Component {
+  static propTypes = {
+    onItemAdded: PropTypes.func,
+  };
   render() {
     return (
       <header className="header">
@@ -12,7 +15,3 @@ export default class AppHeader extends React.Component {
     );
   }
 }
-
-// static propTypes = {
-//   onItemAdded: PropTypes.func,
-// };
