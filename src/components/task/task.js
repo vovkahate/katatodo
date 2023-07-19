@@ -29,8 +29,15 @@ export default class Task extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    this.props.onItemEdited(this.state.newLabel, this.props.id);
-    this.setState({ isEditing: false });
+    if (this.state.newLabel === '' || this.state.newLabel.replaceAll(' ', '').length === 0) {
+      this.setState({
+        isEditing: false,
+        editedLabel: this.state.oldLabel,
+      });
+    } else {
+      this.props.onItemEdited(this.state.newLabel, this.props.id);
+      this.setState({ isEditing: false });
+    }
   };
 
   render() {
