@@ -1,9 +1,9 @@
-import React from "react";
-import AppHeader from "../header";
-import TaskList from "../tasklist/tasklist";
-import Footer from "../footer/footer";
+import React from 'react';
+import AppHeader from '../header';
+import TaskList from '../tasklist/tasklist';
+import Footer from '../footer/footer';
 
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from 'uuid';
 export default class App extends React.Component {
   static defaultProps = {
     done: false,
@@ -11,11 +11,11 @@ export default class App extends React.Component {
 
   state = {
     taskData: [],
-    term: "all",
+    term: 'all',
   };
 
   componentDidMount() {
-    const storedData = localStorage.getItem("taskData");
+    const storedData = localStorage.getItem('taskData');
 
     if (storedData) {
       this.setState({
@@ -24,7 +24,7 @@ export default class App extends React.Component {
     }
   }
   componentDidUpdate() {
-    localStorage.setItem("taskData", JSON.stringify(this.state.taskData));
+    localStorage.setItem('taskData', JSON.stringify(this.state.taskData));
   }
 
   createTaskItem(label) {
@@ -44,7 +44,7 @@ export default class App extends React.Component {
   };
 
   addItem = (text) => {
-    if (text === "" || text.replaceAll(" ", "").length === 0) {
+    if (text === '' || text.replaceAll(' ', '').length === 0) {
       // const newItem = this.createTaskItem("Empty task");
       // this.setState(({ taskData }) => {
       //   const updatedTaskData = [...taskData, newItem];
@@ -67,11 +67,7 @@ export default class App extends React.Component {
       const oldItem = taskData[idx];
       const newItem = { ...oldItem, done: !oldItem.done };
 
-      const newArray = [
-        ...taskData.slice(0, idx),
-        newItem,
-        ...taskData.slice(idx + 1),
-      ];
+      const newArray = [...taskData.slice(0, idx), newItem, ...taskData.slice(idx + 1)];
 
       return { taskData: newArray };
     });
@@ -89,10 +85,10 @@ export default class App extends React.Component {
   };
 
   search(items, term) {
-    if (term === "all") return items;
-    else if (term === "completed") {
+    if (term === 'all') return items;
+    else if (term === 'completed') {
       return items.filter((item) => item.done);
-    } else if (term === "active") {
+    } else if (term === 'active') {
       return items.filter((item) => !item.done);
     }
   }
@@ -104,11 +100,7 @@ export default class App extends React.Component {
       const oldItem = taskData[idx];
       const newItem = { ...oldItem, label: x };
 
-      const newArray = [
-        ...taskData.slice(0, idx),
-        newItem,
-        ...taskData.slice(idx + 1),
-      ];
+      const newArray = [...taskData.slice(0, idx), newItem, ...taskData.slice(idx + 1)];
 
       return { taskData: newArray };
     });
@@ -133,12 +125,7 @@ export default class App extends React.Component {
             onToggleDone={this.onToggleDone}
             onItemEdited={this.onItemEdited}
           />
-          <Footer
-            toDo={todoCount}
-            done={doneCount}
-            onFilter={this.onFilter}
-            clear={this.clearCompleted}
-          />
+          <Footer toDo={todoCount} done={doneCount} onFilter={this.onFilter} clear={this.clearCompleted} />
         </section>
       </section>
     );
