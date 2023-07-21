@@ -15,12 +15,14 @@ export default class Task extends React.Component {
 
   onLabelChange = (e) => {
     if (e.key === 'Escape') {
-      this.setState((prevState) => ({
+      this.setState({
         isEditing: false,
-        editedLabel: prevState.oldLabel,
-      }));
+        editedLabel: this.state.oldLabel,
+        newLabel: '',
+        oldLabel: this.state.oldLabel,
+      });
     } else {
-      const newLabel = e.target.value.trim();
+      const newLabel = e.target.value.replaceAll('  ', ' ');
       this.setState({
         newLabel,
         editedLabel: newLabel,
@@ -29,14 +31,16 @@ export default class Task extends React.Component {
   };
   onSubmit = (e) => {
     e.preventDefault();
-    if (this.state.newLabel === '' || this.state.newLabel.replaceAll(' ', '').length === 0) {
+    if (this.state.newLabel === '' || this.state.newLabel.trim().length === 0) {
       this.setState({
         isEditing: false,
         editedLabel: this.state.oldLabel,
+        newLabel: '',
+        oldLabel: this.state.oldLabel,
       });
     } else {
       this.props.onItemEdited(this.state.newLabel, this.props.id);
-      this.setState({ isEditing: false });
+      this.setState({ isEditing: false, newLabel: '', oldLabel: this.state.newLabel });
     }
   };
 
@@ -48,6 +52,8 @@ export default class Task extends React.Component {
     this.setState({
       isEditing: false,
       editedLabel: this.state.oldLabel,
+      newLabel: '',
+      oldLabel: this.state.oldLabel,
     });
   };
   render() {
