@@ -15,12 +15,7 @@ export default class Task extends React.Component {
 
   onLabelChange = (e) => {
     if (e.key === 'Escape') {
-      this.setState({
-        isEditing: false,
-        editedLabel: this.state.oldLabel,
-        newLabel: '',
-        oldLabel: this.state.oldLabel,
-      });
+      this.cancelEdit();
     } else {
       const newLabel = e.target.value.replaceAll('  ', ' ');
       this.setState({
@@ -32,15 +27,10 @@ export default class Task extends React.Component {
   onSubmit = (e) => {
     e.preventDefault();
     if (this.state.newLabel === '' || this.state.newLabel.trim().length === 0) {
-      this.setState({
-        isEditing: false,
-        editedLabel: this.state.oldLabel,
-        newLabel: '',
-        oldLabel: this.state.oldLabel,
-      });
+      this.cancelEdit();
     } else {
       this.props.onItemEdited(this.state.newLabel, this.props.id);
-      this.setState({ isEditing: false, newLabel: '', oldLabel: this.state.newLabel });
+      this.setState({ isEditing: false, oldLabel: this.state.newLabel, newLabel: '' });
     }
   };
 
@@ -48,19 +38,18 @@ export default class Task extends React.Component {
     this.cancelEdit();
   };
 
-  cancelEdit = () => {
+  cancelEdit() {
     this.setState({
       isEditing: false,
       editedLabel: this.state.oldLabel,
       newLabel: '',
       oldLabel: this.state.oldLabel,
     });
-  };
+  }
   render() {
     const { date, label, onDeleted, onToggleDone, done } = this.props;
 
-    let classCondition = '';
-    if (done) classCondition += 'completed';
+    let classCondition = done ? 'completed' : '';
     const result = formatDistanceToNow(date, { addSuffix: true });
 
     if (!this.state.isEditing) {
