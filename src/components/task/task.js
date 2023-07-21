@@ -40,6 +40,13 @@ export default class Task extends React.Component {
     }
   };
 
+  handleClickOutside = () => {
+    this.setState({
+      isEditing: false,
+      editedLabel: this.state.oldLabel,
+    });
+  };
+
   render() {
     const { date, label, onDeleted, onToggleDone, done } = this.props;
 
@@ -76,6 +83,7 @@ export default class Task extends React.Component {
               value={this.state.editedLabel}
               onChange={(e) => this.onLabelChange(e)}
               onKeyDown={this.onLabelChange}
+              onBlur={this.handleClickOutside}
             />
           </form>
         </li>
