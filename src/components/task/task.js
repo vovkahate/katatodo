@@ -9,24 +9,24 @@ export default class Task extends React.Component {
     newLabel: '',
   };
 
-  handleEdit = (event) => {
+  handleEdit = () => {
     this.setState({ isEditing: true });
   };
 
   onLabelChange = (e) => {
     if (e.key === 'Escape') {
-      this.setState({
+      this.setState((prevState) => ({
         isEditing: false,
-        editedLabel: this.state.oldLabel,
-      });
+        editedLabel: prevState.oldLabel,
+      }));
     } else {
+      const newLabel = e.target.value.trim();
       this.setState({
-        newLabel: e.target.value,
-        editedLabel: e.target.value,
+        newLabel,
+        editedLabel: newLabel,
       });
     }
   };
-
   onSubmit = (e) => {
     e.preventDefault();
     if (this.state.newLabel === '' || this.state.newLabel.replaceAll(' ', '').length === 0) {
@@ -41,12 +41,15 @@ export default class Task extends React.Component {
   };
 
   handleClickOutside = () => {
+    this.cancelEdit();
+  };
+
+  cancelEdit = () => {
     this.setState({
       isEditing: false,
       editedLabel: this.state.oldLabel,
     });
   };
-
   render() {
     const { date, label, onDeleted, onToggleDone, done } = this.props;
 
@@ -84,6 +87,7 @@ export default class Task extends React.Component {
               onChange={(e) => this.onLabelChange(e)}
               onKeyDown={this.onLabelChange}
               onBlur={this.handleClickOutside}
+              autoFocus
             />
           </form>
         </li>
