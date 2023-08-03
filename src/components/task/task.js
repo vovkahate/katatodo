@@ -1,91 +1,88 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 
-export default class Task extends React.Component {
-  state = {
-    isEditing: false,
-    oldLabel: this.props.label,
-    editedLabel: this.props.label,
-    newLabel: '',
+const Task = ({ date, label, onDeleted, onToggleDone, done, onItemEdited, id }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [oldLabel, setOldLabel] = useState(label);
+  const [editedLabel, setEditedLabel] = useState(label);
+  const [newLabel, setNewLabel] = useState('');
+
+  const handleEdit = () => {
+    setIsEditing(true);
   };
 
-  handleEdit = () => {
-    this.setState({ isEditing: true });
-  };
-
-  onLabelChange = (e) => {
+  const onLabelChange = (e) => {
     if (e.key === 'Escape') {
-      this.cancelEdit();
+      cancelEdit();
     } else {
       const newLabel = e.target.value.replaceAll('  ', ' ');
-      this.setState({
-        newLabel,
-        editedLabel: newLabel,
-      });
+      if (newLabel !== editedLabel) {
+        setNewLabel(newLabel);
+        setEditedLabel(newLabel);
+      }
     }
   };
-  onSubmit = (e) => {
+
+  const onSubmit = (e) => {
     e.preventDefault();
-    if (this.state.newLabel === '' || this.state.newLabel.trim().length === 0) {
-      this.cancelEdit();
+    if (newLabel === '' || newLabel.trim().length === 0) {
+      cancelEdit();
     } else {
-      this.props.onItemEdited(this.state.newLabel, this.props.id);
-      this.setState({ isEditing: false, oldLabel: this.state.newLabel, newLabel: '' });
+      onItemEdited(newLabel, id);
+      setIsEditing(false);
+      setOldLabel(newLabel);
+      setNewLabel('');
     }
   };
 
-  handleClickOutside = () => {
-    this.cancelEdit();
+  const handleClickOutside = () => {
+    cancelEdit();
   };
 
-  cancelEdit() {
-    this.setState({
-      isEditing: false,
-      editedLabel: this.state.oldLabel,
-      newLabel: '',
-      oldLabel: this.state.oldLabel,
-    });
-  }
-  render() {
-    const { date, label, onDeleted, onToggleDone, done } = this.props;
+  const cancelEdit = () => {
+    setIsEditing(false);
+    setEditedLabel(oldLabel);
+    setNewLabel('');
+    setOldLabel(oldLabel);
+  };
 
-    let classCondition = done ? 'completed' : '';
-    const result = formatDistanceToNow(date, { addSuffix: true });
+  let classCondition = done ? 'completed' : '';
+  const result = formatDistanceToNow(date, { addSuffix: true });
 
-    if (!this.state.isEditing) {
-      return (
-        <li className={classCondition}>
-          <div className="view">
-            <input className="toggle" type="checkbox" onChange={onToggleDone} checked={done} />
-            <label>
-              <span className="description" onClick={onToggleDone}>
-                {label}
-              </span>
-              <span className="created">created {result}</span>
-            </label>
+  if (!isEditing) {
+    return (
+      <li className={classCondition}>
+        <div className="view">
+          <input className="toggle" type="checkbox" onChange={onToggleDone} checked={done} />
+          <label>
+            <span className="description" onClick={onToggleDone}>
+              {label}
+            </span>
+            <span className="created">created {result}</span>
+          </label>
 
-            <button className="icon icon-edit" onClick={this.handleEdit}></button>
-            <button className="icon icon-destroy" onClick={onDeleted}></button>
-          </div>
-        </li>
-      );
-    } else
-      return (
-        <li className="editing">
-          <form onSubmit={this.onSubmit}>
-            <input
-              onSubmit={this.onSubmit}
-              type="text"
-              className="edit"
-              //placeholder={this.state.editedLabel}
-              value={this.state.editedLabel}
-              onChange={(e) => this.onLabelChange(e)}
-              onKeyDown={this.onLabelChange}
-              onBlur={this.handleClickOutside}
-              autoFocus
-            />
-          </form>
-        </li>
-      );
-  }
-}
+          <button className="icon icon-edit" onClick={handleEdit}></button>
+          <button className="icon icon-destroy" onClick={onDeleted}></button>
+        </div>
+      </li>
+    );
+  } else
+    return (
+      <li className="editing">
+        <form onSubmit={onSubmit}>
+          <input
+            onSubmit={onSubmit}
+            type="text"
+            className="edit"
+            value={editedLabel}
+            onChange={(e) => onLabelChange(e)}
+            onKeyDown={onLabelChange}
+            onBlur={handleClickOutside}
+            autoFocus
+          />
+        </form>
+      </li>
+    );
+};
+
+export default Task;

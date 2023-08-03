@@ -1,132 +1,100 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import AppHeader from '../header';
 import TaskList from '../tasklist/tasklist';
 import Footer from '../footer/footer';
-
 import { v4 as uuidv4 } from 'uuid';
-export default class App extends React.Component {
-  state = {
-    taskData: [],
-    filter: 'all',
-  };
 
-  componentDidMount() {
+const App = () => {
+  const [taskData, setTaskData] = useState([]);
+  const [filter, setFilter] = useState('all');
+
+  useEffect(() => {
     const storedData = localStorage.getItem('taskData');
 
     if (storedData) {
-      this.setState({
-        taskData: JSON.parse(storedData),
-      });
+      setTaskData(JSON.parse(storedData));
     }
-  }
-  componentDidUpdate() {
-    localStorage.setItem('taskData', JSON.stringify(this.state.taskData));
-  }
+  }, []);
 
-  createTaskItem(label) {
+  useEffect(() => {
+    localStorage.setItem('taskData', JSON.stringify(taskData));
+  }, [taskData]);
+
+  const createTaskItem = (label) => {
     return {
       label,
       id: uuidv4(),
       done: false,
       date: Date.now(),
     };
-  }
-  deleteItem = (id) => {
-    this.setState(({ taskData }) => {
-      const updatedTaskData = taskData.filter((el) => el.id !== id);
-
-      return { taskData: updatedTaskData };
-    });
   };
 
-  addItem = (text) => {
-    if (text === '' || text.replaceAll(' ', '').length === 0) {
-    } else {
-      const newItem = this.createTaskItem(text.trim());
-      this.setState(({ taskData }) => {
-        const updatedTaskData = [...taskData, newItem];
+  const deleteItem = (id) => {
+    setTaskData((prevTaskData) => prevTaskData.filter((el) => el.id !== id));
+  };
 
-        return { taskData: updatedTaskData };
-      });
+  const addItem = (text) => {
+    if (text === '' || text.replaceAll(' ', '').length === 0) {
+      return;
+    } else {
+      const newItem = createTaskItem(text.trim());
+      setTaskData((prevTaskData) => [...prevTaskData, newItem]);
     }
   };
 
-  onToggleDone = (id) => {
-    this.setState(({ taskData }) => {
-      const idx = taskData.findIndex((el) => id === el.id);
-
-      const oldItem = taskData[idx];
-      const newItem = { ...oldItem, done: !oldItem.done };
-
-      const newArray = [...taskData.slice(0, idx), newItem, ...taskData.slice(idx + 1)];
-
-      return { taskData: newArray };
+  const onToggleDone = (id) => {
+    setTaskData((prevTaskData) => {
+      return prevTaskData.map((item) => {
+        if (item.id === id) {
+          return { ...item, done: !item.done };
+        }
+        return item;
+      });
     });
   };
 
-  clearCompleted = () => {
-    this.setState(({ taskData }) => {
-      const newArr = taskData.filter((el) => !el.done);
-      return { taskData: newArr };
-    });
+  const clearCompleted = () => {
+    setTaskData((prevTaskData) => prevTaskData.filter((el) => !el.done));
   };
 
-  onFilter = (term) => {
-    if (!term) this.setState({ filter: 'all' });
-
-    this.setState({ filter: term });
+  const onFilter = (term) => {
+    setFilter(term);
   };
 
-  search(items, filter) {
+  const search = (items, filter) => {
     if (filter === 'all') return items;
     else if (filter === 'completed') {
       return items.filter((item) => item.done);
     } else if (filter === 'active') {
       return items.filter((item) => !item.done);
     }
-  }
+  };
 
-  onItemEdited = (x, id) => {
-    this.setState(({ taskData }) => {
-      const idx = taskData.findIndex((el) => id === el.id);
-
-      const oldItem = taskData[idx];
-      const newItem = { ...oldItem, label: x };
-
-      const newArray = [...taskData.slice(0, idx), newItem, ...taskData.slice(idx + 1)];
-
-      return { taskData: newArray };
+  const onItemEdited = (x, id) => {
+    setTaskData((prevTaskData) => {
+      return prevTaskData.map((item) => {
+        if (item.id === id) {
+          return { ...item, label: x };
+        }
+        return item;
+      });
     });
   };
 
-  render() {
-    const { taskData, filter } = this.state;
-    const visibleItems = this.search(taskData, filter);
+  const visibleItems = search(taskData, filter);
+  const doneCount = taskData.filter((el) => el.done).length;
+  const todoCount = taskData.length - doneCount;
 
-    const doneCount = this.state.taskData.filter((el) => el.done).length;
-    const todoCount = this.state.taskData.length - doneCount;
+  return (
+    <section className="todoapp">
+      <AppHeader onItemAdded={addItem} />
 
-    return (
-      <section className="todoapp">
-        <AppHeader onItemAdded={this.addItem} />
-
-        <section className="main">
-          <TaskList
-            setEditedChange={this.setEditedChange}
-            todos={visibleItems}
-            onDeleted={this.deleteItem}
-            onToggleDone={this.onToggleDone}
-            onItemEdited={this.onItemEdited}
-          />
-          <Footer
-            toDo={todoCount}
-            done={doneCount}
-            onFilter={this.onFilter}
-            term={filter}
-            clear={this.clearCompleted}
-          />
-        </section>
+      <section className="main">
+        <TaskList todos={visibleItems} onDeleted={deleteItem} onToggleDone={onToggleDone} onItemEdited={onItemEdited} />
+        <Footer toDo={todoCount} done={doneCount} onFilter={onFilter} term={filter} clear={clearCompleted} />
       </section>
-    );
-  }
-}
+    </section>
+  );
+};
+
+export default App;

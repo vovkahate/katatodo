@@ -1,36 +1,29 @@
-import React from "react";
+import React, { useState } from 'react';
 
-export default class NewTaskForm extends React.Component {
-  state = {
-    label: "",
+const NewTaskForm = React.memo(({ onItemAdded }) => {
+  const [label, setLabel] = useState('');
+
+  const onLabelChange = (e) => {
+    setLabel(e.target.value);
   };
-
-  onLabelChange = (e) => {
-    this.setState({
-      label: e.target.value,
-    });
-  };
-
-  onSubmit = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    this.props.onItemAdded(this.state.label);
-    this.setState({
-      label: "",
-    });
+    onItemAdded(label);
+    setLabel('');
   };
+  return (
+    <form onSubmit={onSubmit}>
+      <input
+        type="text"
+        onSubmit={onSubmit}
+        autoFocus
+        onChange={onLabelChange}
+        className="new-todo"
+        placeholder="What needs to be done?"
+        value={label}
+      />
+    </form>
+  );
+});
 
-  render() {
-    return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          onSubmit={this.onSubmit}
-          autoFocus
-          onChange={this.onLabelChange}
-          className="new-todo"
-          placeholder="What needs to be done?"
-          value={this.state.label}
-        />
-      </form>
-    );
-  }
-}
+export default NewTaskForm;
