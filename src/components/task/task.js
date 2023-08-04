@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 
-const Task = ({ date, label, onDeleted, onToggleDone, done, onItemEdited, id }) => {
+const Task = ({ date, label, onDeleted, onToggleDone, done, onItemEdited, id, onToggleTimerButton, timerButton }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [oldLabel, setOldLabel] = useState(label);
   const [editedLabel, setEditedLabel] = useState(label);
@@ -48,6 +48,7 @@ const Task = ({ date, label, onDeleted, onToggleDone, done, onItemEdited, id }) 
 
   let classCondition = done ? 'completed' : '';
   const result = formatDistanceToNow(date, { addSuffix: true });
+  let classTimerButton = !timerButton ? 'icon icon-play' : 'icon icon-pause';
 
   if (!isEditing) {
     return (
@@ -55,10 +56,22 @@ const Task = ({ date, label, onDeleted, onToggleDone, done, onItemEdited, id }) 
         <div className="view">
           <input className="toggle" type="checkbox" onChange={onToggleDone} checked={done} />
           <label>
-            <span className="description" onClick={onToggleDone}>
+            <span
+              className="title"
+              onClick={() => {
+                onToggleDone(id);
+                onToggleTimerButton(id);
+              }}
+            >
               {label}
             </span>
-            <span className="created">created {result}</span>
+
+            <span className="description">
+              <button className={classTimerButton} onClick={onToggleTimerButton}></button>
+              0:00
+            </span>
+
+            <span className="description">created {result}</span>
           </label>
 
           <button className="icon icon-edit" onClick={handleEdit}></button>

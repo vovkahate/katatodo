@@ -26,6 +26,7 @@ const App = () => {
       id: uuidv4(),
       done: false,
       date: Date.now(),
+      timerButton: false,
     };
   };
 
@@ -81,6 +82,17 @@ const App = () => {
     });
   };
 
+  const onToggleTimerButton = (id) => {
+    setTaskData((prevTaskData) => {
+      return prevTaskData.map((item) => {
+        if (item.id === id) {
+          return { ...item, timerButton: !item.timerButton };
+        }
+        return item;
+      });
+    });
+  };
+
   const visibleItems = search(taskData, filter);
   const doneCount = taskData.filter((el) => el.done).length;
   const todoCount = taskData.length - doneCount;
@@ -90,7 +102,13 @@ const App = () => {
       <AppHeader onItemAdded={addItem} />
 
       <section className="main">
-        <TaskList todos={visibleItems} onDeleted={deleteItem} onToggleDone={onToggleDone} onItemEdited={onItemEdited} />
+        <TaskList
+          todos={visibleItems}
+          onDeleted={deleteItem}
+          onToggleDone={onToggleDone}
+          onItemEdited={onItemEdited}
+          onToggleTimerButton={onToggleTimerButton}
+        />
         <Footer toDo={todoCount} done={doneCount} onFilter={onFilter} term={filter} clear={clearCompleted} />
       </section>
     </section>
