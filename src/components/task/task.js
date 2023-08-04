@@ -1,7 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { formatDistanceToNow } from 'date-fns';
+import Timer from '../timer/timer';
 
-const Task = ({ date, label, onDeleted, onToggleDone, done, onItemEdited, id, onToggleTimerButton, timerButton }) => {
+const Task = ({
+  date,
+  label,
+  onDeleted,
+  onToggleDone,
+  done,
+  onItemEdited,
+  id,
+  timerButtonHandler,
+  timer,
+  timerButton,
+}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [oldLabel, setOldLabel] = useState(label);
   const [editedLabel, setEditedLabel] = useState(label);
@@ -82,11 +94,10 @@ const Task = ({ date, label, onDeleted, onToggleDone, done, onItemEdited, id, on
                 if (e.target !== e.currentTarget) {
                   return;
                 }
-                onToggleTimerButton();
               }}
             >
-              <button className={classTimerButton}></button>
-              0:00
+              <button className={classTimerButton} style={{ visibility: 'hidden' }}></button>
+              <Timer timer={timer} timerButtonHandler={timerButtonHandler} timerButton={timerButton} id={id} />
             </span>
 
             <span className="description">created {result}</span>

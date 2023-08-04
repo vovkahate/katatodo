@@ -27,6 +27,7 @@ const App = () => {
       done: false,
       date: Date.now(),
       timerButton: false,
+      timer: 0,
     };
   };
 
@@ -84,11 +85,11 @@ const App = () => {
     });
   };
 
-  const onToggleTimerButton = (id) => {
+  const timerButtonHandler = (id, seconds) => {
     setTaskData((prevTaskData) => {
       return prevTaskData.map((item) => {
         if (item.id === id) {
-          return { ...item, timerButton: !item.timerButton };
+          return { ...item, timerButton: !item.timerButton, timer: seconds };
         }
         return item;
       });
@@ -109,7 +110,8 @@ const App = () => {
           onDeleted={deleteItem}
           onToggleDone={onToggleDone}
           onItemEdited={onItemEdited}
-          onToggleTimerButton={onToggleTimerButton}
+          period={taskData}
+          timerButtonHandler={timerButtonHandler}
         />
         <Footer toDo={todoCount} done={doneCount} onFilter={onFilter} term={filter} clear={clearCompleted} />
       </section>
