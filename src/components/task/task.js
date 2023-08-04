@@ -52,30 +52,48 @@ const Task = ({ date, label, onDeleted, onToggleDone, done, onItemEdited, id, on
 
   if (!isEditing) {
     return (
-      <li className={classCondition}>
+      <li className={classCondition} style={{ pointerEvents: 'none' }}>
         <div className="view">
-          <input className="toggle" type="checkbox" onChange={onToggleDone} checked={done} />
+          <input
+            className="toggle"
+            type="checkbox"
+            onChange={onToggleDone}
+            checked={done}
+            style={{ pointerEvents: 'auto' }}
+          />
           <label>
             <span
+              style={{ pointerEvents: 'auto' }}
               className="title"
-              onClick={() => {
+              onClick={(e) => {
+                if (e.target !== e.currentTarget) {
+                  return;
+                }
                 onToggleDone(id);
-                onToggleTimerButton(id);
               }}
             >
               {label}
             </span>
 
-            <span className="description">
-              <button className={classTimerButton} onClick={onToggleTimerButton}></button>
+            <span
+              className="description"
+              style={{ pointerEvents: 'auto' }}
+              onClick={(e) => {
+                if (e.target !== e.currentTarget) {
+                  return;
+                }
+                onToggleTimerButton();
+              }}
+            >
+              <button className={classTimerButton}></button>
               0:00
             </span>
 
             <span className="description">created {result}</span>
           </label>
 
-          <button className="icon icon-edit" onClick={handleEdit}></button>
-          <button className="icon icon-destroy" onClick={onDeleted}></button>
+          <button className="icon icon-edit" style={{ pointerEvents: 'auto' }} onClick={handleEdit}></button>
+          <button className="icon icon-destroy" style={{ pointerEvents: 'auto' }} onClick={onDeleted}></button>
         </div>
       </li>
     );

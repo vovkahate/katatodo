@@ -31,7 +31,9 @@ const App = () => {
   };
 
   const deleteItem = (id) => {
-    setTaskData((prevTaskData) => prevTaskData.filter((el) => el.id !== id));
+    if (window.confirm('Are you sure?')) {
+      setTaskData((prevTaskData) => prevTaskData.filter((el) => el.id !== id));
+    }
   };
 
   const addItem = (text) => {
