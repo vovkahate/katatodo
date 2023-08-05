@@ -97,14 +97,24 @@ const Task = ({
               }}
             >
               <button className={classTimerButton} style={{ visibility: 'hidden' }}></button>
-              <Timer timer={timer} timerButtonHandler={timerButtonHandler} timerButton={timerButton} id={id} />
+              <Timer
+                timer={timer}
+                timerButtonHandler={timerButtonHandler}
+                timerButton={timerButton}
+                id={id}
+                done={done}
+              />
             </span>
 
             <span className="description">created {result}</span>
           </label>
 
           <button className="icon icon-edit" style={{ pointerEvents: 'auto' }} onClick={handleEdit}></button>
-          <button className="icon icon-destroy" style={{ pointerEvents: 'auto' }} onClick={onDeleted}></button>
+          <button
+            className="icon icon-destroy"
+            style={{ pointerEvents: 'auto' }}
+            onClick={() => onDeleted(id, label)}
+          ></button>
         </div>
       </li>
     );

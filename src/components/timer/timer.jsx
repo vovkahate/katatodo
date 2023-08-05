@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Timer = ({ id, timer, timerButtonHandler, timerButton }) => {
+const Timer = ({ id, timer, timerButtonHandler, timerButton, done }) => {
   const [elapsedTime, setElapsedTime] = useState(timer);
   const [timerRunning, setTimerRunning] = useState(timerButton);
 

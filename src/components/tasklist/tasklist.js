@@ -7,8 +7,8 @@ const TaskList = ({ todos, onDeleted, onToggleDone, onItemEdited, timerButtonHan
       <Task
         key={item.id}
         {...item}
-        onDeleted={() => onDeleted(item.id)}
-        onToggleDone={() => onToggleDone(item.id)}
+        onDeleted={onDeleted}
+        onToggleDone={onToggleDone}
         onItemEdited={onItemEdited}
         timerButtonHandler={timerButtonHandler}
       />

@@ -31,8 +31,8 @@ const App = () => {
     };
   };
 
-  const deleteItem = (id) => {
-    if (window.confirm('Are you sure?')) {
+  const deleteItem = (id, label) => {
+    if (window.confirm(`Are you sure to delete task "${label}" ?`)) {
       setTaskData((prevTaskData) => prevTaskData.filter((el) => el.id !== id));
     }
   };
