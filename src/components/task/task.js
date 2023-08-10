@@ -89,7 +89,7 @@ const Task = ({
 
             <span
               className="description"
-              style={{ pointerEvents: 'auto', flexWrap: 'nowrap' }}
+              style={{ pointerEvents: 'auto', whitSpace: 'nowrap' }}
               onClick={(e) => {
                 if (e.target !== e.currentTarget) {
                   return;
