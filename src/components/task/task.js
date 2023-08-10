@@ -3,16 +3,16 @@ import { formatDistanceToNow } from 'date-fns';
 import Timer from '../timer/timer';
 
 const Task = ({
-  date,
   label,
   onDeleted,
   onToggleDone,
   done,
   onItemEdited,
   id,
-  timerButtonHandler,
-  timer,
+  date,
   timerButton,
+  seconds,
+  handleTimerButton,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [oldLabel, setOldLabel] = useState(label);
@@ -98,11 +98,11 @@ const Task = ({
             >
               <button className={classTimerButton} style={{ visibility: 'hidden' }}></button>
               <Timer
-                timer={timer}
-                timerButtonHandler={timerButtonHandler}
                 timerButton={timerButton}
                 id={id}
                 done={done}
+                seconds={seconds}
+                handleTimerButton={handleTimerButton}
               />
             </span>
 
@@ -130,6 +130,7 @@ const Task = ({
             onChange={(e) => onLabelChange(e)}
             onKeyDown={onLabelChange}
             onBlur={handleClickOutside}
+            timerButton={timerButton}
             autoFocus
           />
         </form>

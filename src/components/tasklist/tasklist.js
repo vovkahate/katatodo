@@ -1,7 +1,7 @@
 import React from 'react';
 import Task from '../task/task';
 
-const TaskList = ({ todos, onDeleted, onToggleDone, onItemEdited, timerButtonHandler }) => {
+const TaskList = ({ todos, onDeleted, onToggleDone, onItemEdited, handleTimerButton }) => {
   const elements = todos.map((item) => {
     return (
       <Task
@@ -10,7 +10,7 @@ const TaskList = ({ todos, onDeleted, onToggleDone, onItemEdited, timerButtonHan
         onDeleted={onDeleted}
         onToggleDone={onToggleDone}
         onItemEdited={onItemEdited}
-        timerButtonHandler={timerButtonHandler}
+        handleTimerButton={handleTimerButton}
       />
     );
   });
