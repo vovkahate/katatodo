@@ -96,7 +96,7 @@ const Task = ({
                 }
               }}
             >
-              <button className={classTimerButton} style={{ visibility: 'hidden' }}></button>
+              <button className={classTimerButton} style={{ visibility: 'hidden', width: '1', height: '1' }}></button>
               <Timer
                 timerButton={timerButton}
                 id={id}
