@@ -106,7 +106,7 @@ const Task = ({
               />
             </span>
 
-            <span className="description" style={{ overflow: 'hidden' }}>
+            <span className="description" style={{ whiteSpace: 'nowrap' }}>
               created {result}
             </span>
           </label>
