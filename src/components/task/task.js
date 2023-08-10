@@ -89,7 +89,7 @@ const Task = ({
 
             <span
               className="description"
-              style={{ pointerEvents: 'auto' }}
+              style={{ pointerEvents: 'auto', flexWrap: 'nowrap' }}
               onClick={(e) => {
                 if (e.target !== e.currentTarget) {
                   return;
@@ -106,7 +106,7 @@ const Task = ({
               />
             </span>
 
-            <span className="description" style={{ whiteSpace: 'nowrap' }}>
+            <span className="description" style={{ whiteSpace: 'nowrap', overflowX: 'hidden' }}>
               created {result}
             </span>
           </label>
