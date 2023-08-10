@@ -106,7 +106,9 @@ const Task = ({
               />
             </span>
 
-            <span className="description">created {result}</span>
+            <span className="description" style={{ overflow: 'hidden' }}>
+              created {result}
+            </span>
           </label>
 
           <button className="icon icon-edit" style={{ pointerEvents: 'auto' }} onClick={handleEdit}></button>
